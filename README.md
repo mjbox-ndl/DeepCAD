@@ -144,3 +144,22 @@ Please cite our work if you find it useful:
     pages     = {6772-6782}
 }
 ```
+
+
+# 자체 수정사항 사항
+
+### 준비사항
+1. data 폴더 생성
+2. data 폴더에 cad_vec.tar.gz 복사후 압축 해제
+3. data 폴더에 train_val_test_split.json 복사
+4. 옵션(json2pc.py 실행을 통해서 CAD ply 데이터로 변환) -> 우리는 vec로 학습하기 때문에 필요없음.
+5. conda environment 생성
+```
+conda env create -f environment.yml
+conda activate deepcad
+```
+
+### 학습 실행 방법
+```
+python train.py --exp_name newDeepCAD -g 0 -y 2>&1 | tee training.log
+```

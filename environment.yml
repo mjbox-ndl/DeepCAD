@@ -1,0 +1,29 @@
+name: deepcad
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+  - https://repo.anaconda.com/pkgs/main
+  - https://repo.anaconda.com/pkgs/r
+dependencies:
+  - python=3.10
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pytorch-cuda=12.1
+  - numpy
+  - pandas
+  - matplotlib
+  - jupyter
+  - scikit-learn
+  - cython
+  - h5py
+  - trimesh
+  - joblib
+  - tqdm
+  - pip
+  - pip:
+      - protobuf==3.20.3
+      - plyfile==1.1.3
+      - tensorboardX

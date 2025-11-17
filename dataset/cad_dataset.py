@@ -6,15 +6,18 @@ import h5py
 import random
 from cadlib.macro import *
 
-
 def get_dataloader(phase, config, shuffle=None):
     is_shuffle = phase == 'train' if shuffle is None else shuffle
 
     dataset = CADDataset(phase, config)
-    dataloader = DataLoader(dataset, batch_size=config.batch_size, shuffle=is_shuffle, num_workers=config.num_workers,
-                            worker_init_fn=np.random.seed())
+    if config.num_workers > 0:
+        prefetch_factor = max(config.num_workers // 2, 1)
+        dataloader = DataLoader(dataset, batch_size=config.batch_size, shuffle=is_shuffle, num_workers=config.num_workers,
+                                worker_init_fn=np.random.seed(), pin_memory=False, persistent_workers=False, prefetch_factor=prefetch_factor)
+    else:
+        dataloader = DataLoader(dataset, batch_size=config.batch_size, shuffle=is_shuffle, num_workers=config.num_workers,
+                                worker_init_fn=np.random.seed(), pin_memory=False)
     return dataloader
-
 
 class CADDataset(Dataset):
     def __init__(self, phase, config):
@@ -49,7 +52,9 @@ class CADDataset(Dataset):
                 ext_vec1 = np.split(cad_vec, ext_indices1 + 1, axis=0)[:-1]
         
                 data_id2 = self.all_data[random.randint(0, len(self.all_data) - 1)]
+                batch_info["items"] = data_id2
                 h5_path2 = os.path.join(self.raw_data, data_id2 + ".h5")
+
                 with h5py.File(h5_path2, "r") as fp:
                     cad_vec2 = fp["vec"][:]
                 command2 = cad_vec2[:, 0]

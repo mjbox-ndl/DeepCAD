@@ -70,10 +70,52 @@ with open(RECORD_FILE, "r") as fp:
 # exit()
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--only_test', action="store_true", help="only convert test data")
+# parser.add_argument('--only_test', action="store_true", help="only convert test data")
+parser.add_argument('--generation_type', type=str, default="train", choices=["train", "validation", "test"])
 args = parser.parse_args()
 
-if not args.only_test:
-    Parallel(n_jobs=10, verbose=2)(delayed(process_one)(x) for x in all_data["train"])
-    Parallel(n_jobs=10, verbose=2)(delayed(process_one)(x) for x in all_data["validation"])
-Parallel(n_jobs=10, verbose=2)(delayed(process_one)(x) for x in all_data["test"])
+from tqdm import tqdm
+
+if args.generation_type not in ["train", "validation", "test"]:
+    raise ValueError(f"Invalid generation type: {args.generation_type}")
+
+if os.path.exists(f"./data_{args.generation_type}.log"):
+    with open(f"./data_{args.generation_type}.log", "r") as fp:
+        # read this file line by line as list of generated ids
+        generated_ids = fp.readlines()
+else:
+    generated_ids = []
+
+generated_ids = [x.strip().replace("/n", "") for x in generated_ids]
+
+if args.generation_type == "train":
+    skip_ids = ["0011/00116212"]
+    for x in tqdm(all_data["train"]):
+        if x in generated_ids or x in skip_ids:
+            continue
+        # print(x)
+        process_one(x)
+        with open(f"./data_{args.generation_type}.log", "a") as fp:
+            fp.write(x + "\n")
+elif args.generation_type == "validation":
+    skip_ids = []
+    for x in tqdm(all_data["validation"]):
+        if x in generated_ids or x in skip_ids:
+            continue
+        # print(x)
+        process_one(x)
+        with open(f"./data_{args.generation_type}.log", "a") as fp:
+            fp.write(x + "\n")
+elif args.generation_type == "test":
+    skip_ids = []
+    for x in tqdm(all_data["test"]):
+        if x in generated_ids or x in skip_ids:
+            continue
+        # print(x)
+        process_one(x)
+        with open(f"./data_{args.generation_type}.log", "a") as fp:
+            fp.write(x + "\n")
+# if not args.only_test:
+#     Parallel(n_jobs=2, verbose=2)(delayed(process_one)(x) for x in all_data["train"])
+#     Parallel(n_jobs=2, verbose=2)(delayed(process_one)(x) for x in all_data["validation"])
+# Parallel(n_jobs=2, verbose=2)(delayed(process_one)(x) for x in all_data["test"])

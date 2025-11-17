@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# 프로젝트 특정 파일
+data/
+proj_log/
+training.log
+*.log
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# 모델 체크포인트
+*.pth
+*.ckpt
+checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+EOF

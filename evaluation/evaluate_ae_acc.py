@@ -25,7 +25,7 @@ each_cmd_cnt = np.zeros((len(ALL_COMMANDS),))
 each_cmd_acc = np.zeros((len(ALL_COMMANDS),))
 
 # accuracy w.r.t each parameter
-args_mask = CMD_ARGS_MASK.astype(np.float)
+args_mask = CMD_ARGS_MASK.astype(float)
 N_ARGS = args_mask.shape[1]
 each_param_cnt = np.zeros([*args_mask.shape])
 each_param_acc = np.zeros([*args_mask.shape])

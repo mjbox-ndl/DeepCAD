@@ -163,3 +163,24 @@ conda activate deepcad
 ```
 python train.py --exp_name newDeepCAD -g 0 -y 2>&1 | tee training.log
 ```
+
+### 테스트 방법 및 결과
+테스트 실행 방법
+```
+cd evaluation
+python evaluate_ae_acc.py --src ../proj_log/newDeepCAD/results/test_1000
+```
+결과
+```
+avg command acc (ACC_cmd): 0.9935724418547404
+avg param acc (ACC_param): 0.9750241980062592
+each command count: [55527.  7028.  8418.     0. 21440. 16729.]
+each command acc: [0.98634898 0.89442231 0.98859587 0.         0.9891791  0.99139219]
+Line param acc: [0.93952784 0.93036207]
+Arc param acc: [0.85746102 0.84362074 0.73162584 0.93063952]
+Circle param acc: [0.96371065 0.95806297 0.96923816]
+EOS param acc: []
+SOL param acc: []
+Ext param acc: [0.99300573 0.99198071 0.99348809 0.91504371 0.92463069 0.93687067
+ 0.93524269 0.95025626 0.99415134 0.98872475 0.99571902]
+```
